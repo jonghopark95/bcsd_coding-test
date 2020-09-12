@@ -4,7 +4,9 @@ import sys
 from src.board import Board
 from src.post import Post
 
-
+# 게시판은 FreeBoard, AnonymousBoard, JobBoard로 구성되어 있다.
+# 사실상 FreeBoard, JobBoard는 가지고 있는 데이터만 다를 뿐 기능적인 면에서는 동일하다.
+# method는 Board를 상속한다.
 class FreeBoard(Board):
     post_data = [
         Post("자유제목1", "자유내용1", "자유1").set(),
@@ -51,35 +53,36 @@ class AnonymousBoard(Board):
         super().__init__()
 
     def show_post(self):
-        print("{0} {1:20} \n".format("제목", "작성일"))
+        print("{0:<20} {1:<20} {2:<20} \n".format("글 번호", "제목", "작성일"))
         for post in self.post_data:
             print(
-                "#{0}\t {1:20} {2:20} {3}".format(
-                    self.post_data.index(post) + 1,
+                "{0:<20}\t {1:<20} {2:<20} {3}".format(
+                    f"#{self.post_data.index(post) + 1}",
                     post["title"],
                     post["created_at"],
                     post["password"],
                 )
             )
 
-        post_number = int(input("내용을 보고 싶다면 번호를 고르세요 (취소 : 0)\n\n # : "))
+        post_number = int(input("내용을 보고 싶다면 번호를 고르세요 (뒤로 가기 : 0)\n\n # : "))
 
         if post_number > len(self.post_data):
+            os.system("clear")
             print("글 리스트 내의 번호를 입력해주세요.\n\n")
+            self.show_post()
 
         elif post_number == 0:  # 취소를 선택하였을 시 메인으로 다시 돌아간다.
+            os.system("clear")
             from main import Main
 
             Main()
 
         else:
             post = self.post_data[post_number - 1]
+            os.system("clear")
             print(f'내용 : {post["content"]}\n')
 
-            go_back = input("뒤로 가고 싶다면 y를 누르세요.\t")
-
-            if go_back == "Y" or go_back == "y":
-                AnonymousBoard()
+            self.show_post()
 
     def create_post(self):
         while True:
@@ -124,7 +127,7 @@ class AnonymousBoard(Board):
             try:
                 for post in self.post_data:
                     print(
-                        "#{0}\t {1:20} {2:20}".format(
+                        "#{0}\t {1:<20} {2:<20}".format(
                             self.post_data.index(post) + 1,
                             post["title"],
                             post["created_at"],

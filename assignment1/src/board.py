@@ -43,34 +43,36 @@ class Board:
                 print("숫자를 입력해주세요. \n")
 
     def show_post(self, post_list):
-        print(" {0:20} {1:20} {2:20}\n".format("제목", "작성자", "작성일"))
+        print("{0:<20} {1:<20} {2:<20} {3:<20}\n".format("글 번호", "제목", "작성자", "작성일"))
         for post in post_list:
             print(
-                "#{0}\t {1:20} {2:20} {3:20}".format(
-                    post_list.index(post) + 1,
+                "{0:<20} {1:<20} {2:<20} {3:<20}".format(
+                    f"#{post_list.index(post) + 1}",
                     post["title"],
                     post["writer"],
                     post["created_at"],
                 )
             )
 
-        post_number = int(input("내용을 보고 싶다면 번호를 고르세요 (취소 : 0)\n\n # : "))
+        post_number = int(input("내용을 보고 싶다면 번호를 고르세요 (뒤로 가기 : 0)\n\n # : "))
 
         if post_number > len(post_list):
+            os.system("clear")
             print("글 리스트 내의 번호를 입력해주세요.\n\n")
+            self.show_post()
 
         elif post_number == 0:  # 취소를 선택하였을 시 메인으로 다시 돌아간다.
+            os.system("clear")
             from main import Main
 
             Main()
 
         else:
             post = self.post_data[post_number - 1]
+            os.system("clear")
             print(f'내용 : {post["content"]}\n')
 
-            from main import Main
-
-            Main()
+            self.show_post()
 
     def create_post(self, post_list):
         while True:
@@ -113,7 +115,7 @@ class Board:
             try:
                 for post in post_list:
                     print(
-                        "#{0}\t {1:20} {2:20} {3:20}".format(
+                        "#{0}\t {1:<20} {2:<20} {3:<20}".format(
                             post_list.index(post) + 1,
                             post["title"],
                             post["writer"],
