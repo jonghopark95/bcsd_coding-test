@@ -2,7 +2,12 @@ import os
 import sys
 from .post import Post
 
-
+# Board Class는 많은 역할을 담당하고 있다.
+# guide_board : 메뉴를 선택하기 위한 출력문을 생성한다.
+# handle_guide_board_input : 1 ~ 5 사이의 숫자를 사용자에게 요청한다.
+# show_post : 조회 기능을 사용할 때 실행하는 메소드이다.
+# create_post : 작성 기능을 사용할 때 실행하는 메소드이다.
+# delete_post : 삭제 기능을 사용할 때 실행하는 메소드이다.
 class Board:
     """ Board Class """
 
@@ -43,6 +48,8 @@ class Board:
                 print("숫자를 입력해주세요. \n")
 
     def show_post(self, post_list):
+        # 기능적으로는 단지 가지고 있는 post_list를 순회하며 값을 뿌려주는 것 뿐이다.
+        # formatting을 위해 코드가 길어졌다.
         print("{0:<20} {1:<20} {2:<20} {3:<20}\n".format("글 번호", "제목", "작성자", "작성일"))
         for post in post_list:
             print(
@@ -56,17 +63,20 @@ class Board:
 
         post_number = int(input("내용을 보고 싶다면 번호를 고르세요 (뒤로 가기 : 0)\n\n # : "))
 
+        # 사용자가 글 리스트 내의 번호를 입력하지 않을 경우, 재요청한다.
         if post_number > len(post_list):
             os.system("clear")
             print("글 리스트 내의 번호를 입력해주세요.\n\n")
             self.show_post()
 
-        elif post_number == 0:  # 취소를 선택하였을 시 메인으로 다시 돌아간다.
+        # 취소를 선택하였을 시 메인으로 다시 돌아간다.
+        elif post_number == 0:
             os.system("clear")
             from main import Main
 
             Main()
 
+        # 사용자가 유효한 값을 입력했을 경우 해당 값에 맞는 데이터를 보여준다.
         else:
             post = self.post_data[post_number - 1]
             os.system("clear")
@@ -80,15 +90,19 @@ class Board:
                 title = input("글 제목을 입력해주세요. \n 제목 : ")
                 content = input("글 내용을 입력해주세요. \n 내용 : ")
 
+                # 사용자가 입력란에 공백을 입력할 경우 입력 재요청을 한다.
                 if title == "" or content == "":
                     print("입력란에 공백은 허용되지 않습니다.\n")
 
+                # 사용자에게 저장할 것인지 요청한다.
                 else:
                     while True:
                         check = input(
                             f"\n\n\t제목 : {title}\n\t내용 : {content}\n 저장하시겠습니까? (Y / N)\t"
                         )
-                        if check == "Y" or check == "y":  # 유저가 y를 누를 시 리스트에 저장한다.
+
+                        # 사용자가 저장을 원할 시 해당 데이터를 추가해주고 초기화면으로 보내준다.
+                        if check == "Y" or check == "y":
                             post_list.append(
                                 Post(title, content, "관리자").set(),
                             )
@@ -97,12 +111,14 @@ class Board:
 
                             Main()
 
+                        # 사용자가 저장을 원하지 않을 시 초기화면으로 보내준다.
                         elif check == "N" or check == "n":
                             print("\n저장되지 않았습니다.\n\n\n")
                             from main import Main
 
                             Main()
 
+                        # 유효하지 않은 값을 입력할 시 재요청한다.
                         else:
                             print("\n유효하지 않은 입력입니다.\n\n\n")
 
@@ -113,6 +129,7 @@ class Board:
 
         while True:
             try:
+                # 삭제에 앞서 현재 리스트를 보여준다.
                 for post in post_list:
                     print(
                         "#{0}\t {1:<20} {2:<20} {3:<20}".format(
@@ -125,9 +142,11 @@ class Board:
 
                 post_number = int(input("삭제할 글을 고르세요\n\n # : "))
 
+                # 사용자에게 삭제를 원하는 글 id를 요청한다.
                 if post_number > len(post_list):
                     print("글 리스트 내의 번호를 입력해주세요.\n\n")
 
+                # 유효한 값일 시 해당 글을 삭제한다.
                 else:
                     post_list.pop(post_number - 1)
                     print("글이 정상적으로 삭제 되었습니다.\n\n")
