@@ -59,13 +59,18 @@ class Board:
         if post_number > len(post_list):
             print("글 리스트 내의 번호를 입력해주세요.\n\n")
 
+        elif post_number == 0:  # 취소를 선택하였을 시 메인으로 다시 돌아간다.
+            from main import Main
+
+            Main()
+
         else:
-            post = post_list[post_number - 1]
-            print(f'작성자 : {post["writer"]}\n 내용 : {post["content"]}\n')
+            post = self.post_data[post_number - 1]
+            print(f'내용 : {post["content"]}\n')
 
-        from main import Main
+            from main import Main
 
-        Main()
+            Main()
 
     def create_post(self, post_list):
         while True:

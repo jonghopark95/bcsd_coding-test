@@ -28,7 +28,16 @@ class FreeBoard(Board):
         super().delete_post(self.post_data)
 
 
+# 익명 게시판 클래스...
+# 처음에 생각없이 일단 Board 클래스를 만들고 재정의 해야지 했는데... 너무 많은 기능을 한 메소드에 담아 상속을 받기 애매했다.
+# 다른 할일들 때문에 일단 넘어갔는데 좀 더 신경써서 만들걸 하는 아쉬움이 남는다.
+
+# show_post : 작성자를 보여주면 안된다. 해당 요소를 전부 지운다.
+# create_post : 글 생성 시 비밀번호를 요구한다.
+# delete_post : 글 삭제 시 비밀번호를 요구하며, 해당 비밀번호가 저장된 비밀번호와 맞지 않으면 강제 종료한다.
 class AnonymousBoard(Board):
+    """ 익명 게시판 클래스 """
+
     post_data = [
         Post("익명제목1", "익명내용1", "익명1", "11").set(),
         Post("익명제목2", "익명내용2", "익명2", "22").set(),
@@ -58,14 +67,19 @@ class AnonymousBoard(Board):
         if post_number > len(self.post_data):
             print("글 리스트 내의 번호를 입력해주세요.\n\n")
 
+        elif post_number == 0:  # 취소를 선택하였을 시 메인으로 다시 돌아간다.
+            from main import Main
+
+            Main()
+
         else:
             post = self.post_data[post_number - 1]
-            os.system("clear")
             print(f'내용 : {post["content"]}\n')
 
-        from main import Main
+            go_back = input("뒤로 가고 싶다면 y를 누르세요.\t")
 
-        Main()
+            if go_back == "Y" or go_back == "y":
+                AnonymousBoard()
 
     def create_post(self):
         while True:
