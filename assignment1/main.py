@@ -197,7 +197,7 @@ class Main:
         elif board_code == 3:
             JobBoard()
         else:
-            print("Bye Bye 이용해주셔서 감사합니다!!")
+            print("이용해주셔서 감사합니다!!\n\nBye Bye")
             sys.exit(0)
 
     def handle_board_input(self):
